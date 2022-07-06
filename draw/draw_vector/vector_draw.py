@@ -60,7 +60,7 @@ def extract_vectors(objects):
             raise TypeError("Unrecognized object: {}".format(obj))
             
 # draw function for Polygen, Points, Arrow, Segment
-def draw2(*objects, origin=True, axes=True, grid=(1,1), nice_aspect_ratio=True, 
+def draw2(*objects, origin=True, axes=True, grid=(1,1), raw_aspect_ratio=True, 
     width=6, save_as=None):
     
     all_vectors = list(extract_vectors(objects))
@@ -120,7 +120,7 @@ def draw2(*objects, origin=True, axes=True, grid=(1,1), nice_aspect_ratio=True,
         else:
             raise TypeError("Unrecognized object: {}".format(obj)) 
 
-    if nice_aspect_ratio:
+    if raw_aspect_ratio:
         coords_height = (ylim()[1] - ylim()[0])
         coords_width = (xlim()[1] - xlim()[0])
         matplotlib.pyplot.gcf().set_size_inches(width , width * coords_height / coords_width)
@@ -131,7 +131,7 @@ def draw2(*objects, origin=True, axes=True, grid=(1,1), nice_aspect_ratio=True,
     plt.show()
 
 
-def draw(*objects, origin=True, axes=True, grid=(1,1), nice_aspect_ratio=True,
+def draw(*objects, origin=True, axes=True, grid=(1,1), raw_aspect_ratio=True,
             width=6, save_as=None):
 
     all_vectors = list(extract_vectors(objects))
@@ -201,7 +201,7 @@ def draw(*objects, origin=True, axes=True, grid=(1,1), nice_aspect_ratio=True,
 
     fig = matplotlib.pyplot.gcf()
 
-    if nice_aspect_ratio:
+    if raw_aspect_ratio:
         coords_height = (ylim()[1] - ylim()[0])
         coords_width = (xlim()[1] - xlim()[0])
         fig.set_size_inches(width , width * coords_height / coords_width)
