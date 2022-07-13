@@ -4,6 +4,7 @@ import matplotlib.patches
 import matplotlib.pyplot as plt
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon
+from matplotlib.patches import FancyArrowPatch
 from math import sqrt, pi, ceil, floor
 
 from colors import *
@@ -46,14 +47,9 @@ class Arrow2D():
 		self.color = color
 
 	def draw(self):
-		tip_len = (plt.xlim()[1]-plt.xlim()[0])/10.
-		length = sqrt((self.tip[0]-self.tail[0])**2 + (self.tip[1]-self.tail[1])**2)
-		new_len = length = tip_len
-		new_tip_x = (self.tip[0] - self.tail[0]) * (new_len / length)
-		new_tip_y = (self.tip[1] - self.tail[1]) * (new_len / length)
-		plt.gca().arrow(self.tail[0], self.tail[1], new_tip_x, new_tip_y, 
-			head_width=tip_len/1.5, head_length=tip_len, 
-			fc=self.color, ec=self.color)
+		arrow = FancyArrowPatch((self.tail[0], self.tail[1]), (self.tip[0], self.tip[1]), 
+			mutation_scale=15, color=self.color)
+		plt.gca().add_patch(arrow)
 
 
 class Segment2D():
@@ -112,13 +108,11 @@ def draw2d(*objects, origin=True, axes=True, grid=(1,1), raw_aspect_ratio=True, 
 			object.draw()
 		else:
 			raise TypeError("Unrecognized object: {}".format(object))
-
+	
 	# save to file
 	if save_as:
 		plt.savefig(save_as)
-
 	plt.show()
-
 
 
 # helper function to extract all the vectors from a list of objects
@@ -138,5 +132,4 @@ def extract_vector_2d(objects):
 			yield object.e_point
 		else:
 			raise TypeError("Unrecognized object: {}".format(object))
-
 
