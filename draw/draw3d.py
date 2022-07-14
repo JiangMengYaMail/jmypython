@@ -38,16 +38,29 @@ class Polygon3D():
 	# end class Polygon3D
 
 
+## https://stackoverflow.com/a/22867877/1704140
+class FancyArrow3D(FancyArrowPatch):
+    def __init__(self, xs, ys, zs, *args, **kwargs):
+        FancyArrowPatch.__init__(self, (0,0), (0,0), *args, **kwargs)
+        self._verts3d = xs, ys, zs
+
+    def draw(self, renderer):
+        xs3d, ys3d, zs3d = self._verts3d
+        xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, self.axes.M)
+        self.set_positions((xs[0],ys[0]),(xs[1],ys[1]))
+        FancyArrowPatch.draw(self, renderer)
+
+
 class Arrow3D():
 	def __init__(self, head, tail=(0,0,0), color=red):
 		self.head = head
 		self.tail = tail
-		self.xs3d, self.ys3d, self.zs3d = zip(self.tail, self.head)
 		self.color = color
 
 	def draw(self, cur_ax):
-		draw_segment(cur_ax, self.tail, self.head, color=self.color, linestyle='solid')
-
+		xs, ys, zs = zip(self.tail, self.head)
+		a = FancyArrow3D(xs,ys,zs, mutation_scale=20,arrowstyle='-|>', color=self.color)
+		cur_ax.add_artist(a)
 	# end class Arrow3D
 
 
@@ -95,8 +108,8 @@ def draw3d(*objects, origin=True, axes=True, width=6, save_as=None,
 	for object in objects:
 		if type(object) == Points3D \
 		or type(object) == Polygon3D \
-		or type(object) == Arrow3D \
 		or type(object) == Segment3D \
+		or type(object) == Arrow3D \
 		or type(object) == Box3D:
 			object.draw(cur_ax)
 		else:
